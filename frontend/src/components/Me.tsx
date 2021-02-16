@@ -30,12 +30,12 @@ export default function Me(){
 
     if (!data.me) return (
         <Box m={5} display="flex" justifyContent="center">
-            <Link to="/login">
+            <Link to="/login" style={{textDecoration: "none"}}>
                 <Button style={{margin: "5px"}} variant="contained" color="primary">
                     Login
                 </Button>
             </Link>
-            <Link to="/register">
+            <Link to="/register" style={{textDecoration: "none"}}>
                 <Button variant="contained"style={{margin: "5px"}} color="primary">
                     Register
                 </Button>
@@ -50,12 +50,14 @@ export default function Me(){
     const myAuctions = data.me.auctions.filter((a : any)=>{
         return a.ownerId === data.me.id;
     });
-
-    console.log(myBidsAndWatches);
-    console.log(myAuctions);
     
     return (
         <Box m={5}>
+            <Link to="/store" style={{textDecoration: "none"}}>
+                <Button style={{margin: "5px"}} variant="contained" color="primary">
+                    Store
+                </Button>
+            </Link>
             <h1>My Cards</h1>
             <FormControlLabel control={<Switch checked={state.checkedC} onChange={handleChange} name="checkedC"/>}label="Hide"/>
             {!state.checkedC ? (<Box>

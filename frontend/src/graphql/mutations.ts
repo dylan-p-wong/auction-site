@@ -134,4 +134,10 @@ mutation claimCoins($auctionId:Float!){
         }
     }
 `
+
+export const GET_COINS = gql`
+mutation getCoins{
+    getCoins
+}
+`
  

@@ -2,6 +2,9 @@ import { Box, Button, Typography, Card, CardHeader, CardContent } from "@materia
 import { Link } from "react-router-dom";
 import { timeLeftMS, formatTimeThumbnail } from "../helpers/timeHelpers";
 import ClaimButtons from "./ClaimButtons";
+import { ME } from "../graphql/queries";
+import { Fragment, useEffect, useState } from "react";
+import { useQuery } from "@apollo/client";
 
 export default function AuctionThumbnail(props: any){
     const { id, leaderId, currentBid, startingBid, auctionStart, endTime, card } = props.props;

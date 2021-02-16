@@ -1,5 +1,5 @@
 import classes from "*.module.css";
-import { useMutation } from "@apollo/client";
+import { useMutation, useApolloClient } from "@apollo/client";
 import { Typography, CardHeader, Box, Card, CardContent, makeStyles, CardActions, Button, LinearProgress } from "@material-ui/core";
 import { Formik, Form, Field, ErrorMessage } from 'formik';
 import { BID } from "../graphql/mutations";
@@ -18,6 +18,8 @@ export default function Auction(props : any){
     const { id, leaderId, currentBid, startingBid, auctionStart, endTime, card } = props.props;
     const [bid, { data }] = useMutation(BID);
     const [timeLeft, setTimeLeft] = useState(timeLeftMS(new Date(), new Date(endTime)));
+    const client = useApolloClient();
+
     useEffect(() => {
         const timer = setTimeout(() => {
           setTimeLeft(timeLeftMS(new Date(), new Date(endTime)));
@@ -73,7 +75,9 @@ export default function Auction(props : any){
                             }
         
                             setErrors(e);
-                        } 
+                        }
+                        
+                        await client.resetStore();
         
                         setSubmitting(false);
                     }}

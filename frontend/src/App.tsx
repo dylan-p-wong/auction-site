@@ -11,6 +11,7 @@ import Register from "./components/Register";
 import CreateCard from "./components/CreateCard";
 import CreateAuction from "./components/CreateAuction";
 import Navbar from "./components/Navbar";
+import Store from "./components/Store";
 
 const httpLink = new HttpLink({
   uri: 'http://localhost:4000/graphql',
@@ -58,6 +59,9 @@ function App() {
           <Switch>
             <Route path="/me" exact>
               <Me />
+            </Route>
+            <Route path="/store" exact>
+              <Store/>
             </Route>
             <Route path="/login" exact>
               <Login />

@@ -31,20 +31,20 @@ export default function Login() {
         <Box m={5} display="flex" justifyContent="center">
             <Formik
             initialValues={{
-                length: '',
-                startingBid: '',
+                length: "",
+                startingBid: "",
             }}
             validate={values => {
                 const errors: Partial<Values> = {};
                 if (!values.length) {
                     errors.length = 'Required';
-                } else if (!/^[0-9]{1,45}$/i.test(values.length)){
+                } else if (!/^[0-9]*$/gm.test(values.length)){
                     errors.length = 'Must be a number'
                 }
 
                 if (!values.startingBid) {
                     errors.startingBid = 'Required';
-                } else if (!/^[0-9]{1,45}$/i.test(values.length)){
+                } else if (!/^[0-9]*$/gm.test(values.startingBid)){
                     errors.startingBid = 'Must be a number'
                 }
 

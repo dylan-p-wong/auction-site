@@ -160,13 +160,27 @@ export class AuctionResolver {
                 }
             ]}
         }
+        const user = await getRepository(User).findOne({where: {id: req.session.userId}, relations: ["auctions"]});
+        if (user.coins < bid){
+            return { errors: [
+                {
+                    field: "bid",
+                    message: "You cannot afford this bid"
+                }
+            ]}
+        }
+
+        if (auction.leaderId) {
+            const outbidUser = await getRepository(User).findOne(auction.leaderId);
+            outbidUser.coins = outbidUser.coins + auction.currentBid;
+        }
 
         auction.currentBid = bid;
         auction.leaderId = parseInt(req.session.userId);
         await getRepository(Auction).save(auction);
 
-        const user = await getRepository(User).findOne({where: {id: req.session.userId}, relations: ["auctions"]});
         user.auctions.push(auction);
+        user.coins = user.coins - bid;
         await getRepository(User).save(user);
 
         await pubsub.publish(`BID-${auctionId}`, {});

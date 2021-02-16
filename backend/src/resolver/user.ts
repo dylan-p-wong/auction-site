@@ -1,9 +1,10 @@
-import { Arg, Ctx, Field, Mutation, ObjectType, Query, Resolver, PubSub } from "type-graphql";
+import { Arg, Ctx, Field, Mutation, ObjectType, Query, Resolver, PubSub, UseMiddleware } from "type-graphql";
 import { User } from "../entity/User";
 import * as argon2 from "argon2";
 import { getRepository } from "typeorm";
 import { Context } from "../types";
 import { FieldError } from "./fieldError";
+import { isAuth } from "../middleware/isAuth";
 
 @ObjectType()
 class UserResponse {
@@ -125,6 +126,21 @@ export class UserResolver {
                 resolve(true);
             });
         });
+    }
+
+    @Mutation(() => Boolean)
+    @UseMiddleware(isAuth)
+    async getCoins(
+        @Ctx() { req }: Context
+    ) {
+        const user = await getRepository(User).findOne(req.session.userId);
+        if (!user){
+            return false;
+        }
+
+        user.coins += 500;
+        await getRepository(User).save(user);
+        return true;
     }
 }
 
