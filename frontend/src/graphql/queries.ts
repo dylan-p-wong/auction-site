@@ -20,10 +20,13 @@ export const GET_AUCTIONS = gql`
     getAuctions {
       id
       leaderId
+      ownerId
       endTime
       auctionStart
       startingBid
       currentBid
+      coinsClaimed
+      itemClaimed
       card {
         id
         name
@@ -39,11 +42,28 @@ export const ME = gql`
       id
       username
       email
+      coins
       cards {
         id
         name
         description
         auctionId
+      }
+      auctions {
+        id
+        leaderId
+        ownerId
+        endTime
+        auctionStart
+        startingBid
+        currentBid
+        coinsClaimed
+        itemClaimed
+        card {
+          id
+          name
+          description
+        }
       }
     }
   }
@@ -55,10 +75,13 @@ export const GET_AUCTION = gql`
       auction{
         id
         leaderId
+        ownerId
         endTime
         auctionStart
         startingBid
         currentBid
+        coinsClaimed
+        itemClaimed
         card {
           id
           name

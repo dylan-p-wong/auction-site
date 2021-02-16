@@ -1,5 +1,5 @@
 import { Field, ObjectType } from "type-graphql";
-import { BaseEntity, Column, CreateDateColumn, Entity, JoinColumn, ManyToOne, OneToOne, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm";
+import { BaseEntity, Column, CreateDateColumn, Entity, JoinColumn, ManyToOne, OneToMany, OneToOne, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm";
 import { Auction } from "./Auction";
 import { User } from "./User";
 
@@ -21,6 +21,10 @@ export class Card extends BaseEntity {
     @Field(() => User)
     @ManyToOne(()=> User, user => user.cards)
     user: User;
+
+    @Field(() => Auction)
+    @OneToMany(() => Auction, auction => auction.card)
+    auctions: Auction[];
 
     @Field(() => Number, {nullable: true})
     @Column({nullable: true})

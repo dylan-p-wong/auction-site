@@ -18,9 +18,9 @@ export const LOGIN = gql`
 export const REGISTER = gql`
     mutation register($email: String!, $username: String!, $password: String!){
         register(email:$email, username: $username, password: $password) {
-            user {
-            username
-            email
+                user {
+                username
+                email
             }
             errors {
                 field
@@ -50,14 +50,14 @@ export const CREATE_CARD = gql`
     mutation createCard($name:String!, $description: String!){
     createCard (name:$name, description: $description){
         card {
-        id
-        name
-        description
-        auctionId
+            id
+            name
+            description
+            auctionId
         }
         errors {
-        field
-        message
+            field
+            message
         }
     }
 }
@@ -69,11 +69,13 @@ export const CREATE_AUCTION = gql`
             auction {
                 id
                 leaderId
-                currentBid
-                startingBid
-                auctionStart
+                ownerId
                 endTime
-                updatedAt
+                auctionStart
+                startingBid
+                currentBid
+                coinsClaimed
+                itemClaimed
             }
             errors {
                 field
@@ -89,4 +91,47 @@ export const LOGOUT = gql`
     }
 `
  
+export const CLAIM_ITEM = gql`
+    mutation claimItem($auctionId:Float!){
+        claim(auctionId: $auctionId){
+            auction {
+            id
+            leaderId
+            ownerId
+            endTime
+            auctionStart
+            startingBid
+            currentBid
+            coinsClaimed
+            itemClaimed
+            }
+            errors {
+            field
+            message
+            }
+        }
+    }
+`
+
+export const CLAIM_COINS = gql`
+mutation claimCoins($auctionId:Float!){
+        claimCoins(auctionId: $auctionId){
+            auction {
+            id
+            leaderId
+            ownerId
+            endTime
+            auctionStart
+            startingBid
+            currentBid
+            coinsClaimed
+            itemClaimed
+            }
+            errors {
+            field
+            message
+            }
+        }
+    }
+`
  

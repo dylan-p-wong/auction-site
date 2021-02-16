@@ -51,7 +51,7 @@ export default function CreateCard() {
                 }
 
                 if (result) {
-                    history.push("/me");
+                    await history.push("/me");
                 }
 
                 setSubmitting(false);

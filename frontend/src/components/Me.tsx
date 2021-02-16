@@ -2,11 +2,19 @@ import { useQuery } from "@apollo/client";
 import { ME } from "../graphql/queries";
 import { Box, Card, CircularProgress, Button, CardContent, Typography, CardHeader } from "@material-ui/core";
 import { Link } from "react-router-dom";
-import { Fragment } from "react";
+import { Fragment, useEffect, useState } from "react";
+import AuctionThumbnail from "./AuctionThumbnail";
+import Item from "./Card";
 
 export default function Me(){
     const { loading, error, data } = useQuery(ME);
+    const [didMount, setDidMount] = useState(false); 
 
+    useEffect(() => {
+        setDidMount(true);
+        return () => setDidMount(false);
+    });
+    
     if (loading) return <CircularProgress color="primary"/>
     if (error) return <p>Error</p>;    
 
@@ -24,7 +32,7 @@ export default function Me(){
             </Link>
         </Fragment>
     );
-
+    
     return (
         <Box m={5}>
             <h1>My Cards</h1>
@@ -36,26 +44,14 @@ export default function Me(){
                 </Link>
             </Box>
             {data.me.cards.map((c : any) => (
-                <Card>
-                    <CardHeader title={`${c.name} (Id: ${c.id})`} subheader={c.description}/>
-                    <CardContent>           
-                            {c.auctionId ? (
-                                <Link to={`/auction/${c.auctionId}`}>
-                                    <Button variant="contained" color="primary">
-                                        View Auction
-                                    </Button>
-                                </Link>
-                            ): 
-                                <Link to={`/create-auction?cardId=${c.id}`}>
-                                    <Button variant="contained" color="primary">
-                                        Create Auction
-                                    </Button>
-                                </Link>
-                            }
-                    </CardContent>
-                </Card>
-                ))}
-                
+                <Item key={c.id} props={c}></Item>
+            ))}
+            <br />
+            <h1>My Auctions</h1>
+            {data.me.auctions.map((a : any) => (
+                <AuctionThumbnail key={a.id} props={a}></AuctionThumbnail>
+            ))}
+            <h1>My Bids/Watches</h1> 
         </Box>
     );
 }

@@ -24,7 +24,7 @@ export class UserResolver {
         if (!req.session.userId) {
             return null;
         }
-        const user = await getRepository(User).findOne({where: {id: req.session.userId}, relations: ["cards"]});
+        const user = await getRepository(User).findOne({where: {id: req.session.userId}, relations: ["cards", "auctions", "auctions.card"]});
         return user;
     }
 
@@ -66,6 +66,8 @@ export class UserResolver {
         user.username = username;
         user.password = hashedPassword;
         user.cards = [];
+        user.auctions = [];
+        user.coins = 0;
 
         await getRepository(User).save(user); 
 

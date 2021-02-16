@@ -68,7 +68,7 @@ export class AuctionResolver {
             ]}
         }
 
-        if (card.auctionId){
+        if (card.auctions && card.auctions.length > 0 && card[card.auctions.length - 1]){
             return { errors: [
                 {
                     field: "",
@@ -88,13 +88,20 @@ export class AuctionResolver {
 
         const newAuction = new Auction();
         newAuction.card = card;
+        newAuction.ownerId = parseInt(req.session.userId);
         const now = new Date();
         newAuction.endTime = new Date(now.getTime() + length * 60 * 1000);
         newAuction.startingBid = startingBid;
-        newAuction.claimed = false;
+        newAuction.itemClaimed = false;
+        newAuction.coinsClaimed = false;
         await getRepository(Auction).save(newAuction);
+
         card.auctionId = newAuction.id;
         await getRepository(Card).save(card);
+
+        const user = await getRepository(User).findOne({where: {id: req.session.userId}, relations: ["auctions"]});
+        user.auctions.push(newAuction);
+        await getRepository(User).save(user);
 
         return { auction: newAuction };
     }
@@ -138,11 +145,75 @@ export class AuctionResolver {
 
         auction.currentBid = bid;
         auction.leaderId = parseInt(req.session.userId);
-
         await getRepository(Auction).save(auction);
+
+        const user = await getRepository(User).findOne({where: {id: req.session.userId}, relations: ["auctions"]});
+        user.auctions.push(auction);
+        await getRepository(User).save(user);
+
         await pubsub.publish(`BID-${auctionId}`, {});
 
         return { auction: auction };
+    }
+
+    @Mutation(()=>AuctionResponse)
+    @UseMiddleware(isAuth)
+    async claimCoins(
+        @Arg("auctionId") auctionId: number,
+        @Ctx() { req }: Context
+    ){
+        const auction = await getRepository(Auction).findOne({where: {id: auctionId}, relations: ["card"]});
+
+        if (!auction){
+            return { errors: [
+                {
+                    field: "",
+                    message: "This auction does not exist"
+                }
+            ]}
+        }
+
+        if (timeLeftMS(new Date(), auction.endTime) > 0) {
+            return { errors: [
+                {
+                    field: "",
+                    message: "This auction is not over"
+                }
+            ]}
+        }
+
+        if (auction.coinsClaimed){
+            return { errors: [
+                {
+                    field: "",
+                    message: "Auction claimed already"
+                }
+            ]}
+        }
+
+        if (auction.ownerId !== parseInt(req.session.userId)){
+            return { errors: [
+                {
+                    field: "",
+                    message: "You did not run this auction"
+                }
+            ]}
+        }
+
+        const user = await getRepository(User).findOne(req.session.userId);
+        user.coins = user.coins + auction.currentBid;
+        await getRepository(User).save(user);
+        auction.coinsClaimed = true;
+        await getRepository(Auction).save(auction);
+
+        if (!auction.currentBid || !auction.leaderId){
+            auction.itemClaimed = true;
+            const card = await getRepository(Card).findOne({where: {id: auction.card.id}, relations: ["user"]});
+            card.auctionId = null;
+            await getRepository(Card).save(card);
+        }
+
+        return { auction };
     }
 
     @Mutation(()=>AuctionResponse)
@@ -171,7 +242,7 @@ export class AuctionResolver {
             ]}
         }
 
-        if (auction.claimed){
+        if (auction.itemClaimed){
             return { errors: [
                 {
                     field: "",
@@ -180,19 +251,24 @@ export class AuctionResolver {
             ]}
         }
 
-        if (auction.leaderId !== parseInt(req.session.userId)){
+        if ((auction.ownerId !== parseInt(req.session.userId) && auction.leaderId == null) && auction.leaderId !== parseInt(req.session.userId)){
             return { errors: [
                 {
                     field: "",
-                    message: "You did not win this auction"
+                    message: "This is not yours to claim"
                 }
             ]}
         }
 
-        auction.claimed = true;
+        auction.itemClaimed = true;
         await getRepository(Auction).save(auction);
+
         const card = await getRepository(Card).findOne({where: {id: auction.card.id}, relations: ["user"]});
-        card.user = await getRepository(User).findOne(req.session.userId);
+        
+        if (auction.leaderId === parseInt(req.session.userId)){
+            card.user = await getRepository(User).findOne(req.session.userId);
+        }
+
         card.auctionId = null;
         await getRepository(Card).save(card);
 

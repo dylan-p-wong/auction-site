@@ -11,7 +11,7 @@ export class Auction extends BaseEntity {
     id!: number;
 
     @Field(() => Card)
-    @OneToOne(() => Card, {onDelete: 'CASCADE'})
+    @ManyToOne(() => Card, card => card.auctions)
     @JoinColumn()
     card: Card;
 
@@ -21,7 +21,7 @@ export class Auction extends BaseEntity {
 
     @Field({ nullable: true })
     @Column({ nullable: true })
-    currentBid?: Number;
+    currentBid?: number;
 
     @Field({nullable: true})
     @Column({ nullable: true })
@@ -29,7 +29,15 @@ export class Auction extends BaseEntity {
 
     @Field()
     @Column()
-    claimed: boolean; 
+    ownerId: number;
+
+    @Field()
+    @Column()
+    itemClaimed: boolean; 
+
+    @Field()
+    @Column()
+    coinsClaimed: boolean; 
 
     @Field(() => Date)
     @Column({type: "timestamp"})

@@ -58,6 +58,9 @@ export default function Navbar(){
                             Logout
                         </Button>
                     </Box>
+                    <Typography>
+                        Coins: {data.me.coins}
+                    </Typography>
                     </Fragment>
                 )}
             </Toolbar>
