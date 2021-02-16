@@ -292,4 +292,28 @@ export class AuctionResolver {
 
         return { auction };
     }
+
+    @Mutation(()=>AuctionResponse)
+    @UseMiddleware(isAuth)
+    async watch(
+        @Arg("auctionId") auctionId: number,
+        @Ctx() { req }: Context
+    ){
+        const auction = await getRepository(Auction).findOne({where: {id: auctionId}, relations: ["card"]});
+
+        if (!auction){
+            return { errors: [
+                {
+                    field: "",
+                    message: "This auction does not exist"
+                }
+            ]}
+        }
+
+        const user = await getRepository(User).findOne({where: {id: req.session.userId}, relations: ["auctions"]});
+        user.auctions.push(auction);
+        await getRepository(User).save(user);
+
+        return { auction };
+    }
 }

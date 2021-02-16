@@ -8,6 +8,7 @@ import { useEffect, useState } from "react";
 import { timeLeftMS, formatTimeLeft } from "../helpers/timeHelpers";
 import { Fragment } from "react";
 import ClaimButtons from "./ClaimButtons";
+import WatchLaterIcon from '@material-ui/icons/WatchLater';
 
 interface Values {
     bid: string;
@@ -24,7 +25,7 @@ export default function Auction(props : any){
 
         return () => clearTimeout(timer);
     });
-          
+    
     return (
         <Box m={5}>
             <Card>

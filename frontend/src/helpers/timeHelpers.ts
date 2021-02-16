@@ -11,8 +11,8 @@ export const formatTimeLeft = (mseconds : number) => {
     const minutesLeft = Math.floor((seconds % 3600) / 60);
     const secondsLeft = Math.floor((seconds % 60));
 
-    const minuteString = minutesLeft > 10 ? minutesLeft : "0" + minutesLeft;
-    const secondsString = secondsLeft > 10 ? secondsLeft : "0" + secondsLeft;
+    const minuteString = minutesLeft >= 10 ? minutesLeft : "0" + minutesLeft;
+    const secondsString = secondsLeft >= 10 ? secondsLeft : "0" + secondsLeft;
 
     return `${hoursLeft}:${minuteString}:${secondsString}`;
 }
