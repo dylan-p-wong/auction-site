@@ -3,7 +3,7 @@ import { CREATE_AUCTION } from "../graphql/mutations";
 import { useAuth } from "../helpers/useIsAuth";
 import { Formik, Form, Field, ErrorMessage } from 'formik';
 import { Box, Button, CircularProgress, LinearProgress} from "@material-ui/core";
-import { useMutation } from "@apollo/client";
+import { useMutation, useApolloClient } from "@apollo/client";
 import { TextField } from 'formik-material-ui';
 
 interface Values {
@@ -21,6 +21,7 @@ export default function Login() {
     const query = useQuery();
     const cardId = query.get("cardId");
     const [createAuction, { data }] = useMutation(CREATE_AUCTION);
+    const client = useApolloClient();
 
     if (!cardId){
         history.push("/me");
@@ -71,6 +72,7 @@ export default function Login() {
                 }
 
                 if (result.data.createAuction) {
+                    await client.resetStore();
                     history.push(`/auction/${result.data.createAuction.auction.id}`);
                 }
 

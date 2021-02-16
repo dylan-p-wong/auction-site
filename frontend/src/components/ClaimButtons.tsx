@@ -17,11 +17,15 @@ export default function ClaimButtons(props: any){
         return () => setDidMount(false);
     });
 
-    if (loading) return <CircularProgress color="primary"/>
-    if (error) return <p>Error</p>;    
 
+    if (loading) return <Fragment></Fragment>
+    if (error) return <p>Error seek support</p>;    
     if (!data.me){
-        return <p>You are not logged in</p>;
+        return <Fragment></Fragment>;
+    }
+
+    if (data.me.id !== ownerId && data.me.id !== leaderId){
+        return <Fragment></Fragment>;
     }
 
     return (
@@ -33,7 +37,7 @@ export default function ClaimButtons(props: any){
                             await claimCoins({variables: {auctionId: id}});
                             await client.resetStore();
                         }
-                }>Claim Coins</Button>) : (<Button disabled>Claim Coins</Button>)
+                }>Claim {currentBid} Coins</Button>) : (<Button disabled>Claim Coins</Button>)
                 }
                 {
                     ((leaderId == null && data.me.id === ownerId && !itemClaimed) || (leaderId != null && data.me.id === leaderId && !itemClaimed)) ? (<Button 

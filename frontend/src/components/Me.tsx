@@ -19,25 +19,36 @@ export default function Me(){
     if (error) return <p>Error</p>;    
 
     if (!data.me) return (
-        <Fragment>
+        <Box m={5} display="flex" justifyContent="center">
             <Link to="/login">
-                <Button variant="contained" color="primary">
+                <Button style={{margin: "5px"}} variant="contained" color="primary">
                     Login
                 </Button>
             </Link>
             <Link to="/register">
-                <Button variant="contained" color="primary">
+                <Button variant="contained"style={{margin: "5px"}} color="primary">
                     Register
                 </Button>
             </Link>
-        </Fragment>
+        </Box>
     );
+
+    const myBidsAndWatches = data.me.auctions.filter((a : any)=>{
+        return a.ownerId !== data.me.id;
+    });
+
+    const myAuctions = data.me.auctions.filter((a : any)=>{
+        return a.ownerId === data.me.id;
+    });
+
+    console.log(myBidsAndWatches);
+    console.log(myAuctions);
     
     return (
         <Box m={5}>
             <h1>My Cards</h1>
             <Box mb={4} mt={4}>
-                <Link to="/create-card">
+                <Link to="/create-card" style={{textDecoration: "none"}}>
                     <Button variant="contained" color="primary">
                         Create Card
                     </Button>

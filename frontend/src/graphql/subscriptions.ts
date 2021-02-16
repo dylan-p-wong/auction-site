@@ -5,10 +5,13 @@ subscription newBid($auctionId: Float!){
   newBid (auctionId: $auctionId){
     id
     leaderId
+    ownerId
     endTime
     auctionStart
     startingBid
     currentBid
+    coinsClaimed
+    itemClaimed
   }
 }
 `

@@ -40,12 +40,12 @@ const client = new ApolloClient({
   link: splitLink,
   cache: new InMemoryCache(),
   defaultOptions: {
-    watchQuery: {
+    /* watchQuery: {
       fetchPolicy: 'no-cache'
     },
     query: {
       fetchPolicy: 'no-cache'
-    }
+    } */
   }
 });
 

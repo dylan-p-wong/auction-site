@@ -14,7 +14,7 @@ export default function Navbar(){
     return (
         <AppBar position="static">
             <Toolbar>
-                <Link to="/auctions">
+                <Link to="/auctions" style={{textDecoration: "none"}}>
                     <Box m={2}>
                         <Button variant="contained">
                             Auctions
@@ -24,14 +24,14 @@ export default function Navbar(){
 
                 {loading ? null: !data.me ? (
                     <Fragment>
-                        <Link to="/login">
+                        <Link to="/login" style={{textDecoration: "none"}}>
                             <Box m={2}>
                                 <Button variant="contained">
                                     Login
                                 </Button>
                             </Box>
                         </Link>
-                        <Link to="/register">
+                        <Link to="/register" style={{textDecoration: "none"}}>
                             <Box m={2}>
                                 <Button variant="contained">
                                     Register
@@ -41,7 +41,7 @@ export default function Navbar(){
                     </Fragment>
                 ): (
                     <Fragment>
-                    <Link to="/me">
+                    <Link to="/me" style={{textDecoration: "none"}}>
                         <Box m={2}>
                             <Button variant="contained">
                                 My Account
@@ -58,6 +58,9 @@ export default function Navbar(){
                             Logout
                         </Button>
                     </Box>
+                    <h3 style={{marginRight: "10px"}}>
+                        {data.me.username}
+                    </h3>
                     <Typography>
                         Coins: {data.me.coins}
                     </Typography>

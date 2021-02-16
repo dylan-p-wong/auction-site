@@ -125,6 +125,24 @@ export class AuctionResolver {
             ]}
         }
 
+        if (auction.ownerId === parseInt(req.session.userId)){
+            return { errors: [
+                {
+                    field: "",
+                    message: "You can not bid on your own auction"
+                }
+            ]}
+        }
+
+        if (auction.leaderId === parseInt(req.session.userId)){
+            return { errors: [
+                {
+                    field: "",
+                    message: "You do not want to outbid yourself"
+                }
+            ]}
+        }
+
         if (timeLeftMS(new Date(), auction.endTime) < 10) {
             return { errors: [
                 {

@@ -17,6 +17,7 @@ export default function CreateCard() {
     useAuth();
     const [createCard, { data, error }] = useMutation(CREATE_CARD);
     const history = useHistory();
+    const client = useApolloClient();
 
     return (
         <Box m={5} display="flex" justifyContent="center">
@@ -51,6 +52,7 @@ export default function CreateCard() {
                 }
 
                 if (result) {
+                    await client.resetStore();
                     await history.push("/me");
                 }
 

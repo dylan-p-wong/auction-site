@@ -39,7 +39,7 @@ export default function Auction(props : any){
                     <Typography variant="body2">
                         Time Left: {timeLeft > 0 ? formatTimeLeft(timeLeft) : "00:00:00"}
                     </Typography>
-                    <ClaimButtons props={props.props}/>
+                    {timeLeft > 0 ? null : (<ClaimButtons props={props.props}/>)}
                 </CardContent>
                 <CardActions>
                     <Formik
