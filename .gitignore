@@ -1,3 +1,8 @@
 backend/node_modules
 frontend/node_modules
 backend/dist
+frontend/.vercelignore
+backend/src/migration
+backend/.env.production
+backend/.env
+frontend/.env

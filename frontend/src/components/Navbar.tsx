@@ -22,7 +22,7 @@ export default function Navbar(){
                     </Box>
                 </Link>
 
-                {loading ? null: !data.me ? (
+                {loading || !data ? null: !data.me ? (
                     <Fragment>
                         <Link to="/login" style={{textDecoration: "none"}}>
                             <Box m={2}>

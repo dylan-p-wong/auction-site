@@ -1,3 +1,4 @@
+require('dotenv').config()
 import { ApolloServer } from "apollo-server-express";
 import { PubSub } from 'graphql-subscriptions';
 import express from "express";
@@ -15,9 +16,20 @@ import { Auction } from "./entity/Auction";
 import { Card } from "./entity/Card";
 import { User } from "./entity/User";
 import cors from "cors";
+import path from "path";
+
+const config:any = {
+    "type": "postgres",
+    "url": process.env.DATABASE_URL,
+    "synchronize": true,
+    "logging": false,
+    "entities": ["dist/entity/*.js"],
+    "migrations": [path.join(__dirname, "./migration/*")]
+}
 
 const main = async () => {
-    const conn = await createConnection();    
+    const conn = await createConnection(config);    
+
     const app = express();
     //await getRepository(Auction).delete({});
     //await getRepository(User).delete({});
@@ -27,26 +39,25 @@ const main = async () => {
     
     app.use(
         cors({
-            origin: "http://localhost:3000",
+            origin: process.env.CORS_ORIGIN,
             credentials: true
         })
     );
 
     app.use(session({
         name: 'qid',
-        secret: 'asdfasdf',
+        secret: process.env.SECRET,
         resave: false,
         saveUninitialized: false,
         cookie: { 
             httpOnly: true,
-            secure: process.env.NODE_ENV === "prod",
+            secure: process.env.NODE_ENV === "production",
             sameSite: "lax",
+            domain: process.env.NODE_ENV === "production" ? ".auctionhouse.shop" : undefined
         }
     }));
 
     const httpServer = http.createServer(app);
-
-    //const pubsub = new PubSub();
 
     const schema = await buildSchema({
         resolvers: [UserResolver, CardResolver, AuctionResolver]
@@ -62,11 +73,9 @@ const main = async () => {
 
     apolloServer.installSubscriptionHandlers(httpServer);
 
-    const PORT = process.env.PORT || 4000;
-
-    httpServer.listen(PORT, () => {
-        console.log(`🚀 Server ready at http://localhost:${PORT}${apolloServer.graphqlPath}`)
-        console.log(`🚀 Subscriptions ready at ws://localhost:${PORT}${apolloServer.subscriptionsPath}`)
+    httpServer.listen(parseInt(process.env.PORT), () => {
+        console.log(`🚀 Server ready at http://localhost:${process.env.PORT}${apolloServer.graphqlPath}`)
+        console.log(`🚀 Subscriptions ready at ws://localhost:${process.env.PORT}${apolloServer.subscriptionsPath}`)
     });
 }
 

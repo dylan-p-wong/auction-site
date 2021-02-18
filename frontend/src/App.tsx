@@ -13,13 +13,15 @@ import CreateAuction from "./components/CreateAuction";
 import Navbar from "./components/Navbar";
 import Store from "./components/Store";
 
+console.log(process.env.REACT_APP_HTTPS_URL);
+
 const httpLink = new HttpLink({
-  uri: 'http://localhost:4000/graphql',
-  credentials: 'include'
+  uri: process.env.REACT_APP_HTTPS_URL, // 'http://localhost:4000/graphql'
+  credentials: 'include' 
 });
 
 const wsLink = new WebSocketLink({
-  uri: 'ws://localhost:4000/graphql',
+  uri: process.env.REACT_APP_WEB_SOCKET_URL || 'ws://localhost:4000/graphql', // 'ws://localhost:4000/graphql'
   options: {
     reconnect: true
   }

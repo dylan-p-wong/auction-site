@@ -4,21 +4,9 @@
    "port": 5432,
    "username": "dylan",
    "password": "wong",
-   "database": "auction-house",
-   "synchronize": true,
+   "database": "auction-house2",
+   "synchronize": false,
    "logging": false,
-   "entities": [
-      "dist/entity/*.js"
-   ],
-   "migrations": [
-      "src/migration/**/*.ts"
-   ],
-   "subscribers": [
-      "src/subscriber/**/*.ts"
-   ],
-   "cli": {
-      "entitiesDir": "src/entity",
-      "migrationsDir": "src/migration",
-      "subscribersDir": "src/subscriber"
-   }
+   "entities": ["dist/entity/*.js"],
+   "migrations": ["dist/migration/*.js"]
 }
