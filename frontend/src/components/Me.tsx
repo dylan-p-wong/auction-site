@@ -26,7 +26,7 @@ export default function Me(){
     });
     
     if (loading) return <CircularProgress color="primary"/>
-    if (error) return <p>Error</p>;    
+    if (error) return <p>Error fetching your info</p>;    
 
     if (!data.me) return (
         <Box m={5} display="flex" justifyContent="center">
@@ -53,40 +53,45 @@ export default function Me(){
     
     return (
         <Box m={5}>
-            <Link to="/store" style={{textDecoration: "none"}}>
-                <Button style={{margin: "5px"}} variant="contained" color="primary">
-                    Store
-                </Button>
-            </Link>
+            <h2>{data.me.username}</h2>
+            <h2>{data.me.email}</h2>
+            <h2>Coin Balance: {data.me.coins}</h2>
+            <Box mb={4} mt={4}>
+                <Link to="/store" style={{textDecoration: "none"}}>
+                    <Button style={{margin: "5px"}} variant="contained" color="primary">
+                        Store
+                    </Button>
+                </Link>
+    
+                <Link to="/create-card" style={{textDecoration: "none"}}>
+                    <Button style={{margin: "5px"}} variant="contained" color="primary">
+                        Create Card
+                    </Button>
+                </Link>
+            </Box>
+
             <h1>My Cards</h1>
             <FormControlLabel control={<Switch checked={state.checkedC} onChange={handleChange} name="checkedC"/>}label="Hide"/>
-            {!state.checkedC ? (<Box>
-                <Box mb={4} mt={4}>
-                    <Link to="/create-card" style={{textDecoration: "none"}}>
-                        <Button variant="contained" color="primary">
-                            Create Card
-                        </Button>
-                    </Link>
-                </Box>
-                {data.me.cards.map((c : any) => (
+            <Box>
+            {!state.checkedC ? data.me.cards.length > 0 ? (
+                data.me.cards.map((c : any) => (
                     <Item key={c.id} props={c}></Item>
-                ))}
-            </Box>) : null}
-            
-            <br />
+                ))
+            ) : <p>You have no cards</p> : null}
+            </Box>
             <Box>
                 <h1>My Auctions</h1>
                 <FormControlLabel control={<Switch checked={state.checkedA} onChange={handleChange} name="checkedA"/>}label="Hide"/>
-                {!state.checkedA ? myAuctions.map((a : any) => (
+                {!state.checkedA ? myAuctions.length > 0 ? myAuctions.map((a : any) => (
                     <AuctionThumbnail key={a.id} props={a}></AuctionThumbnail>
-                )) : null}
+                )) : <p>You have no auctions</p> : null}
             </Box>
             <Box>
                 <h1>My Bids/Watches</h1> 
                 <FormControlLabel control={<Switch checked={state.checkedB} onChange={handleChange} name="checkedB"/>}label="Hide"/>
-                {!state.checkedB ? myBidsAndWatches.map((a : any) => (
+                {!state.checkedB ? myBidsAndWatches.length > 0 ? myBidsAndWatches.map((a : any) => (
                     <AuctionThumbnail key={a.id} props={a}></AuctionThumbnail>
-                )) : null}
+                )) : <p>You have no bids/watches</p> : null}
             </Box>
         </Box>
     );

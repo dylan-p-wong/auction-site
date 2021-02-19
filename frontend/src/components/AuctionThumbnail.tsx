@@ -11,9 +11,9 @@ export default function AuctionThumbnail(props: any){
     const left = timeLeftMS(new Date(), new Date(endTime));
 
     return (
-        <Box key={id} m={6}>
+        <Box key={id}>
             <Card>
-                <Box p={6} >
+                <Box p={3} >
                 <h2>Auction {id}</h2>
                 <CardHeader title={`${card.name} (Id: ${card.id})`} subheader={card.description}/>
                     <CardContent>

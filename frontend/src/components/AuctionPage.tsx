@@ -17,7 +17,7 @@ export default function AuctionPage() {
     const { data: dataSub, loading: loadingSub } = useSubscription(AUCTION_SUBSCRIPTION, {variables: {auctionId: parseInt(id)}});
 
     if (loading) return <CircularProgress color="primary"/>
-    if (error) return <p>Error</p>;  
+    if (error) return <p>Error fetching auctions</p>;  
 
     const info = data.getAuction.auction;
 

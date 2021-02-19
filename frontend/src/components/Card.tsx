@@ -5,9 +5,9 @@ export default function Item(props: any){
     const { name, id, description, auctionId } = props.props;
 
     return (
-        <Box m={6} key={id}>
+        <Box key={id}>
             <Card>
-                <Box p={6}>
+                <Box p={3}>
                     <CardHeader title={`${name} (Id: ${id})`} subheader={description}/>
                     <CardContent>
                         {auctionId ? 

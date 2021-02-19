@@ -29,7 +29,7 @@ export default function Auctions() {
     }
 
     if (loading) return <CircularProgress color="primary"/>
-    if (error) return <p>Error</p>;    
+    if (error) return <p>Error fetching auctions</p>;    
 
     const newData = data.getAuctions.filter((a : any) => {
         const left = timeLeftMS(new Date(), new Date(a.endTime));
