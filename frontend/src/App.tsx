@@ -87,7 +87,7 @@ function App() {
               <Box mt={6} display="flex" justifyContent="center">
                   <Box boxShadow={2} p={6} borderRadius="10%" style={{backgroundColor: "#F4F4F4", width: "70%"}}>
                     <Typography component="h1" variant="h2" align="center" color="textPrimary" gutterBottom>
-                      Auction House
+                      Auction House 🔨
                     </Typography>
                     <br/>
                     <Typography variant="h5" align="center" color="textSecondary" paragraph>
