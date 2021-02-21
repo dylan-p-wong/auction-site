@@ -114,7 +114,7 @@ export default function Navbar(){
         <Fragment>
             {data ? (
                 <AuctionLink />
-            ) : <Typography>Error Connecting to Server</Typography>}
+            ) : null}
             {loading || !data ? null: !data.me ? (
                 <Fragment>
                     <LoginLink />
